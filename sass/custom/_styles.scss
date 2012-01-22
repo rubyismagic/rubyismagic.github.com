@@ -1,2 +1,24 @@
-// This File is imported last, and will override other styles in the cascade
-// Add styles here to make changes without digging in too much
+/*// This File is imported last, and will override other styles in the cascade*/
+/*// Add styles here to make changes without digging in too much*/
+
+body > header {
+  padding: 0.1em 0.8em 0.1em 0.1em;
+
+  hgroup {
+    background: $header-bg no-repeat image-url('logo.png') top left;
+    text-align: right;
+    height: 250px;
+
+    h1 {
+      margin-top: 1.2em;
+      font-size: 2.8em;
+    }
+  }
+
+}
+
+article {
+  img.shadow-box {
+    @include shadow-box;
+  }
+}
