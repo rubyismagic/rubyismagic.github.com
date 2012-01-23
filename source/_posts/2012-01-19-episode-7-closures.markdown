@@ -3,7 +3,7 @@ layout: post
 title: "Episode #7: Closures"
 date: 2012-01-19 22:55
 comments: true
-categories:
+categories: closures
 ---
 
 Herzlich willkommen zu der ~~ersten~~ siebten Ausgabe von 'Ruby is Magic'. Für alle
@@ -12,11 +12,9 @@ dabei sein konnten, oder einfach noch mal lesen wollen was passiert ist,
 kommt hier nun die schriftliche Zusammenfassung mit Codestücken und
 Ponies.
 
-Inspiriert von einem hervorragenden [Beitrag von Paul
-Cantrell](http://innig.net/software/ruby/closures-in-ruby.html), haben
+Inspiriert von einem hervorragenden [Beitrag von Paul Cantrell](http://innig.net/software/ruby/closures-in-ruby.html), haben
 wir uns in dieser Folge einem Ruby-Thema gewidmet, dem jeder
-Ruby-Entwickler regelmäßig begegnet: _Blöcke und Closures_. Wie bei
-vielem, dass wir regelmäßig verwenden lohnt sich aber auch hier ein
+Ruby-Entwickler regelmäßig begegnet: _Blöcke und Closures_. Wie bei vielem, dass wir regelmäßig verwenden lohnt sich aber auch hier ein
 Blick hinter das Offensichtliche. Und vielleicht entdeckt man etwas,
 dass einem bisher so nicht klar war. Wir hoffen also euch neue
 Erkenntnisse über Closures in Ruby nahe zu bringen – wir hatten
@@ -27,7 +25,7 @@ jedenfalls welche bei den Vorbereitungen der Show.
 Wie so oft lassen sich Eigenschaften von Programmiersprachen am besten
 in der Programmiersprache selbst verdeutlichen. Bevor wir euch aber mit
 einem Code-Fragment nach dem anderen bewerfen, wollen wir kurz eine
-Definition von Closures aufstellen. Sie erhebt dabei keinerlei Anspruch
+Definition von Closures liefern. Sie erhebt dabei keinerlei Anspruch
 auf Vollständigkeit, wir brauchen nur eine gemeinsame Grundlage.
 
 **Wir verstehen Closures als Codeblöcke, die …**
@@ -98,7 +96,7 @@ prüfen.
 
 Blöcke fangen den definierenden Kontext zwar ein, können ihn jedoch (zum
 Glück) nicht erweitern. So erhält man dann auch bei der Ausführung des
-nachfolgenden Codes Fehler.
+nachfolgenden Codes einen Fehler.
 
 {% codeblock Blöcke erweitern den definierenden Kontext nicht lang:ruby %}
 %w(MacBook Headphones iPhone Camera).each do |item|
@@ -189,8 +187,7 @@ hat sich dann wohl auch das Ruby-Core-Team gedacht und ab Ruby 1.9 ist
 
 Dennoch stellt sich die Frage, ob Unterschiede zwischen den `lambda` und
 `Proc.new` Varianten existieren? Und wenn ja, welche? Die Antwort ist zu
-erwarten gewesen: Ja, es gibt Unterschiede: Auswirkungen auf den _Kontrollfluss_
-und die _Prüfung der Arität_.
+erwarten gewesen: Ja, es gibt Unterschiede. Schauen wir uns einmal den _Kontrollfluss_ und die _Prüfung der Arität_ an.
 
 ### Kontrollfluss
 
@@ -217,19 +214,51 @@ call_closure(lambda { return "Everypony calm down. All is good." })
 {% endcodeblock %}
 
 Während sich also ein `return` in einem durch `Proc.new` erzeugten
-Closure immer auf den ursprünglich definierenden Kontext bezieht,
-springt es in einem `lambda`-Closure einfach aus der Funktion zurück.
-Bei der Verwendung der `lambda`-Methode erhält man also eine "true
-closure". In beiden Fällen erhält man übrigens eine Instanz der
-`Proc`-Klasse.
+Closure immer auf den ursprünglich definierenden Kontext bezieht (in diesem Beispiel ist das `main`), springt es in einem `lambda`-Closure einfach aus dem `lambda` zurück. Bei der Verwendung der `lambda`-Methode erhält man also eine "true closure", welches sich in puncto Kontrollfluss wie eine Methode verhält. In beiden Fällen erhält man übrigens eine Instanz der `Proc`-Klasse.
 
 ### Aritätsprüfung
 
 ### Fun Facts
 
-{% img left /images/ponies/pinkie_pie.png 280 311 %}
+{% img right /images/ponies/pinkie_pie.png 280 311 %}
+
 
 ## One More Thing
+
+Fassen wir einmal zusammen, welche Möglichkeiten von Closures wir bisher besprochen haben:
+
+* block (implizit übergeben)
+* block (explizit übergeben)
+* block (explizit übergeben und zu Proc)    
+* Proc.new  
+* proc (Alias auf lambda / Proc.new)
+* lambda
+
+Aber fehlt da nicht noch etwas? JA!
+
+Methoden sind ebenfalls Closures! Das sie den umgebenen Kontext einfangen ist offensichtlich. Sie überprüfen weiterhin die Arität und ein `return` springt nur aus der Methode heraus.
+
+Um eine Methode referenzierbar zu machen, benötigt man die `method()`-Methode. Mit `method()` erhält man eine `Method`-Instanz, welches die Methode repräsentiert.
+
+{% codeblock Methoden als Closures lang:ruby %}
+class Bag
+  def each_item(closure)
+    @items.each { |item| closure.call(item) }
+  end
+end
+
+class Iterator
+  def self.print_element(element)
+    puts "Element: #{element}"
+  end
+end
+
+my_bag = Bag.new(%w(MacBook Headphones iPad Gloves))
+
+my_bag.each_item lambda { |item| puts "Element: #{item}" }
+
+my_bag.each_item Iterator.method(:print_element)
+{% endcodeblock %}
 
 ## Präsentation
 
