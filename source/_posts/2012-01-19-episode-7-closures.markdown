@@ -12,9 +12,8 @@ dabei sein konnten, oder einfach noch mal lesen wollen was passiert ist,
 kommt hier nun die schriftliche Zusammenfassung mit Codestücken und
 Ponies.
 
-Inspiriert von einem hervorragenden [Beitrag von Paul
-Cantrell](http://innig.net/software/ruby/closures-in-ruby.html), haben
-wir uns in dieser Folge einem Ruby-Thema gewidmet, dem jeder
+Inspiriert von einem hervorragenden [Beitrag von Paul Cantrell](http://innig.net/software/ruby/closures-in-ruby.html),
+haben wir uns in dieser Folge einem Ruby-Thema gewidmet, dem jeder
 Ruby-Entwickler regelmäßig begegnet: _Blöcke und Closures_. Wie bei
 vielem, dass wir regelmäßig verwenden lohnt sich aber auch hier ein
 Blick hinter das Offensichtliche. Und vielleicht entdeckt man etwas,
@@ -225,11 +224,100 @@ closure". In beiden Fällen erhält man übrigens eine Instanz der
 
 ### Aritätsprüfung
 
-### Fun Facts
+Closures antworten nicht nur auf `call()`, sondern auch auf die Nachricht
+`arity()`:
 
-{% img left /images/ponies/pinkie_pie.png 280 311 %}
+{% blockquote Ruby-Dokumentation http://www.ruby-doc.org/core-1.9.3/Proc.html#method-i-arity %}
+Returns the number of arguments that would not be ignored. If the block
+is declared to take no arguments, returns 0. If the block is known to
+take exactly n arguments, returns n. If the block has optional
+arguments, return -n-1, where n is the number of mandatory arguments. A
+proc with no argument declarations is the same a block declaring || as
+its arguments.
+{% endblockquote %}
+
+Es liegt nahe, dass die Arität beim Aufruf des Closures überprüft wird.
+Falls die Anzahl der Parameter dann nicht mit der erwarteten
+übereinstimmt wird ein `ArgumentError` geworfen. Dieses Verhalten tritt
+allerdings nur auf, wenn die `lambda`-Methode verwendet wurde.
+"Closures" durch `Proc.new` überprüfen die Arität nicht:
+
+{% codeblock Aritätsprüfung: Proc.new lang:ruby %}
+proc_closure = Proc.new do |arg1, arg2|
+  puts "arg1: #{arg1}; arg2: #{arg2}"
+end
+
+proc_closure.call(1,2,3,4) # arg1: 1; arg2: 2
+proc_closure.call(1,2) # arg1: 1; arg2: 2
+proc_closure.call(1) # arg1: 1; arg2: nil
+{% endcodeblock %}
+
+{% codeblock Aritätsprüfung: lambda lang:ruby %}
+lambda_closure = lambda do |arg1, arg2|
+  puts "arg1: #{arg1}; arg2: #{arg2}"
+end
+
+lambda_closure.call(1,2,3,4) # ArgumentError
+lambda_closure.call(1,2) # arg1: 1; arg2: 2
+lambda_closure.call(1) # ArgumentError
+{% endcodeblock %}
+
+{% img left /images/ponies/pinkie_pie.png %}
+
+Aber genauso magisch wie Ruby ist, gibt ist auch immer mal wieder
+[Momente der Verwirrung](https://www.destroyallsoftware.com/talks/wat).
+So auch in diesem Fall: Closures aus `lambda` prüfen die Arität nur in
+Ruby 1.9 so wie erwartet. Und damit kommen wir dann auch zum **Fun Fact**
+dieser Ausgabe:
+
+In Ruby 1.8 gilt für Closures durch `lambda`:
+
+ * `lambda {||}.artiy != lambda {}.arity`
+ * `lambda {}.arity == -1`
+ * Die Anzahl der Argumente wird nicht geprüft wenn die Arität 1 ist
+
+In Ruby 1.9 ist die Welt aber wie gesagt in Ordnung, zumindest in dieser
+Hinsicht: `lambda {}.arity == lambda {||}.arity == 0`
+
+{% codeblock Lazy Collection lang:ruby %}
+class BlogEntry
+  class LazyLoadCollection
+    include Enumerable
+
+    def initialize(lazy_collection, after_load_callback = nil)
+      @lazy_collection     = lazy_collection
+      @after_load_callback = after_load_callback.present? ? after_load_callback : lambda { |args| return args }
+      @collection          = @after_load_callback.call(@lazy_collection.call)
+    end
+
+    def each(&block)
+      @collection.each(&block)
+    end
+  end
+
+  class <<self
+    def find_all(language)
+      lazy_feed           = lambda { Nokogiri::XML(open(Rails.config.blog_feed_url)) }
+      create_blog_entries = lambda do |feed|
+        feed.xpath("//item").collect { |item| BlogEntry.new(xml_item) }
+      end
+
+      LazyLoadCollection.new lazy_feed, create_blog_entries
+    end
+  end
+
+  def initialize(xml)
+    self.attributes = (item.xpath("*/text()").inject({}) do |attributes, text|
+      attributes[attribute_name] = text.content if text.parent.name.present?
+      attributes
+    end)
+  end
+end
+{% endcodeblock %}
 
 ## One More Thing
+
+{% gist 294f56ed664efa99dcac %}
 
 ## Präsentation
 
