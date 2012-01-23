@@ -12,18 +12,19 @@ dabei sein konnten, oder einfach noch mal lesen wollen was passiert ist,
 kommt hier nun die schriftliche Zusammenfassung mit Codestücken und
 Ponies.
 
-Inspiriert von einem hervorragenden [Beitrag von Paul Cantrell](http://innig.net/software/ruby/closures-in-ruby.html), haben
-wir uns in dieser Folge einem Ruby-Thema gewidmet, dem jeder
-Ruby-Entwickler regelmäßig begegnet: _Blöcke und Closures_. Wie bei vielem, dass wir regelmäßig verwenden lohnt sich aber auch hier ein
-Blick hinter das Offensichtliche. Und vielleicht entdeckt man etwas,
-dass einem bisher so nicht klar war. Wir hoffen also euch neue
-Erkenntnisse über Closures in Ruby nahe zu bringen – wir hatten
-jedenfalls welche bei den Vorbereitungen der Show.
+
+Inspiriert von einem hervorragenden [Beitrag von Paul Cantrell](http://innig.net/software/ruby/closures-in-ruby.html), haben wir uns
+in dieser Folge einem Ruby-Thema gewidmet, dem jeder Ruby-Entwickler
+regelmäßig begegnet: _Blöcke und Closures_. Wie bei vielem, dass wir
+regelmäßig verwenden lohnt sich aber auch hier ein Blick hinter das
+Offensichtliche. Und vielleicht entdeckt man etwas, dass einem bisher so nicht
+klar war. Wir hoffen also euch neue Erkenntnisse über Closures in Ruby nahe zu
+bringen – wir hatten jedenfalls welche bei den Vorbereitungen der Show.
 
 <!-- more -->
 
 Wie so oft lassen sich Eigenschaften von Programmiersprachen am besten
-in der Programmiersprache selbst verdeutlichen. Bevor wir euch aber mit
+in der Sprache selbst verdeutlichen. Bevor wir euch aber mit
 einem Code-Fragment nach dem anderen bewerfen, wollen wir kurz eine
 Definition von Closures liefern. Sie erhebt dabei keinerlei Anspruch
 auf Vollständigkeit, wir brauchen nur eine gemeinsame Grundlage.
@@ -218,21 +219,75 @@ Closure immer auf den ursprünglich definierenden Kontext bezieht (in diesem Bei
 
 ### Aritätsprüfung
 
-### Fun Facts
+Closures antworten nicht nur auf `call()`, sondern auch auf die Nachricht
+`arity()`:
 
-{% img right /images/ponies/pinkie_pie.png 280 311 %}
+{% blockquote Ruby-Dokumentation http://www.ruby-doc.org/core-1.9.3/Proc.html#method-i-arity %}
+Returns the number of arguments that would not be ignored. If the block
+is declared to take no arguments, returns 0. If the block is known to
+take exactly n arguments, returns n. If the block has optional
+arguments, return -n-1, where n is the number of mandatory arguments. A
+proc with no argument declarations is the same a block declaring || as
+its arguments.
+{% endblockquote %}
+
+Es liegt nahe, dass die Arität beim Aufruf des Closures überprüft wird.
+Falls die Anzahl der Parameter dann nicht mit der erwarteten
+übereinstimmt wird ein `ArgumentError` geworfen. Dieses Verhalten tritt
+allerdings nur auf, wenn die `lambda`-Methode verwendet wurde.
+"Closures" durch `Proc.new` überprüfen die Arität nicht:
+
+{% codeblock Aritätsprüfung: Proc.new lang:ruby %}
+proc_closure = Proc.new do |arg1, arg2|
+  puts "arg1: #{arg1}; arg2: #{arg2}"
+end
+
+proc_closure.call(1,2,3,4) # arg1: 1; arg2: 2
+proc_closure.call(1,2) # arg1: 1; arg2: 2
+proc_closure.call(1) # arg1: 1; arg2: nil
+{% endcodeblock %}
+
+{% codeblock Aritätsprüfung: lambda lang:ruby %}
+lambda_closure = lambda do |arg1, arg2|
+  puts "arg1: #{arg1}; arg2: #{arg2}"
+end
+
+lambda_closure.call(1,2,3,4) # ArgumentError
+lambda_closure.call(1,2) # arg1: 1; arg2: 2
+lambda_closure.call(1) # ArgumentError
+{% endcodeblock %}
+
+
+Aber genauso magisch wie Ruby ist, gibt ist auch immer mal wieder
+[Momente der Verwirrung](https://www.destroyallsoftware.com/talks/wat).
+So auch in diesem Fall: Closures aus `lambda` prüfen die Arität nur in
+Ruby 1.9 so wie erwartet. Und damit kommen wir dann auch zum **Fun Fact**
+dieser Ausgabe:
+
+In Ruby 1.8 gilt für Closures durch `lambda`:
+
+ * `lambda {||}.artiy != lambda {}.arity`
+ * `lambda {}.arity == -1`
+ * Die Anzahl der Argumente wird nicht geprüft wenn die Arität 1 ist
+
+In Ruby 1.9 ist die Welt aber wie gesagt in Ordnung, zumindest in dieser
+Hinsicht: `lambda {}.arity == lambda {||}.arity == 0`
+
+Dirk hat ein nettes Beispiel für Closures in seinem Blog vor einiger Zeit geschrieben: [Roll your own lazy loading collection](http://railsbros.de/2011/04/09/lazy_load_collection.html) beschreibt, wie man eine *lazy collection* bauen kann.
 
 
 ## One More Thing
+
+{% img right /images/ponies/pinkie_pie.png 280 311 %}
 
 Fassen wir einmal zusammen, welche Möglichkeiten von Closures wir bisher besprochen haben:
 
 * block (implizit übergeben)
 * block (explizit übergeben)
-* block (explizit übergeben und zu Proc)    
-* Proc.new  
-* proc (Alias auf lambda / Proc.new)
-* lambda
+* block (explizit übergeben und zu Proc)
+* `Proc.new`
+* `proc` (Alias auf `lambda` / `Proc.new`)
+* `lambda`
 
 Aber fehlt da nicht noch etwas? JA!
 
@@ -259,6 +314,10 @@ my_bag.each_item lambda { |item| puts "Element: #{item}" }
 
 my_bag.each_item Iterator.method(:print_element)
 {% endcodeblock %}
+
+Als Beispiel für Methoden als Closures haben wird eine Implementierung von
+[Python-style Decorators](http://stackoverflow.com/questions/101268/hidden-features-of-python#101447) gezeigt.
+Den Code dazu findet ihr [hier](https://gist.github.com/294f56ed664efa99dcac) und ein paar weitere Details wird es in einem separatem Post geben.
 
 ## Präsentation
 
