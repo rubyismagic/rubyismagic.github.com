@@ -1,24 +1,102 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Ruby is Magic – Das Blog]]></title>
-  <link href="http://rubyismagic.de/atom.xml" rel="self"/>
-  <link href="http://rubyismagic.de/"/>
-  <updated>2012-01-23T20:20:12+01:00</updated>
-  <id>http://rubyismagic.de/</id>
-  <author>
-    <name><![CDATA[Dirk Breuer & Sebastian Cohnen]]></name>
-    
-  </author>
-  <generator uri="http://octopress.org/">Octopress</generator>
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Episode #7: Closures - Ruby is Magic – Das Blog</title>
+  <meta name="author" content="Dirk Breuer & Sebastian Cohnen">
 
   
-  <entry>
-    <title type="html"><![CDATA[Episode #7: Closures]]></title>
-    <link href="http://rubyismagic.de/blog/2012/01/19/episode-7-closures/"/>
-    <updated>2012-01-19T22:55:00+01:00</updated>
-    <id>http://rubyismagic.de/blog/2012/01/19/episode-7-closures</id>
-    <content type="html"><![CDATA[<p>Herzlich willkommen zu der <del>ersten</del> siebten Ausgabe von &#8216;Ruby is Magic&#8217;. Für alle
+  <meta name="description" content="Herzlich willkommen zu der ersten siebten Ausgabe von &#8216;Ruby is Magic&#8217;. Für alle
+die am 18.01. bei der colognerb nicht live mit
+dabei sein &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://rubyismagic.de/blog/2012/01/19/episode-7-closures">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="http://feeds.feedburner.com/rubyismagic" rel="alternate" title="Ruby is Magic – Das Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href='http://fonts.googleapis.com/css?family=Walter+Turncoat' rel='stylesheet' type='text/css'>
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Ruby is Magic – Das Blog</a></h1>
+  
+    <h2>Jetzt mit 20% mehr Inhalt</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="http://feeds.feedburner.com/rubyismagic" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:rubyismagic.de" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archiv</a></li>
+  <li><a href="/showmaster">Showmaster</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Episode #7: Closures</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T22:55:00+01:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+        
+         | <a href="#disqus_thread">Comments</a>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Herzlich willkommen zu der <del>ersten</del> siebten Ausgabe von &#8216;Ruby is Magic&#8217;. Für alle
 die am 18.01. bei der <a href="http://colognerb.de">colognerb</a> nicht live mit
 dabei sein konnten, oder einfach noch mal lesen wollen was passiert ist,
 kommt hier nun die schriftliche Zusammenfassung mit Codestücken und
@@ -58,7 +136,7 @@ antworten kann auch ein Closure.</p>
 
 <h2>Die Sieben ist unsere Zahl</h2>
 
-<p><img class="right" src="http://rubyismagic.de/images/posts/episode_7_closures/sieben.png" width="400" height="289"></p>
+<p><img class="right" src="/images/posts/episode_7_closures/sieben.png" width="400" height="289"></p>
 
 <p>Wirklich bemerkenswert – und durchaus auch verwirrend – ist die Fülle an
 Konstrukten, die in Ruby Closures oder Closure-ähnliches beschreiben: Es
@@ -385,7 +463,7 @@ Hinsicht: <code>lambda {}.arity == lambda {||}.arity == 0</code></p>
 
 <h2>One More Thing</h2>
 
-<p><img class="right" src="http://rubyismagic.de/images/ponies/pinkie_pie.png" width="280" height="311"></p>
+<p><img class="right" src="/images/ponies/pinkie_pie.png" width="280" height="311"></p>
 
 <p>Fassen wir einmal zusammen, welche Möglichkeiten von Closures wir bisher besprochen haben:</p>
 
@@ -454,7 +532,135 @@ müsst ihr allerdings zur <a href="http://twitter.com/colognerb">@colognerb</a> 
 
 <div style="width:595px;margin:auto" id="__ss_11190532"> <object id="__sse11190532" width="595" height="497"> <param name="movie" value="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=colognerb-closures-120121083720-phpapp02&rel=0&stripped_title=ruby-is-magic-episode-7-closures&userName=railsbros_dirk" /> <param name="allowFullScreen" value="true"/> <param name="allowScriptAccess" value="always"/> <param name="wmode" value="transparent"/> <embed name="__sse11190532" src="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=colognerb-closures-120121083720-phpapp02&rel=0&stripped_title=ruby-is-magic-episode-7-closures&userName=railsbros_dirk" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="transparent" width="595" height="497"></embed> </object> </div>
 
-]]></content>
-  </entry>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
   
-</feed>
+
+<span class="byline author vcard">Posted by <span class="fn">Dirk Breuer & Sebastian Cohnen</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-19T22:55:00+01:00" pubdate data-updated="true">Jan 19<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/closures/'>closures</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://rubyismagic.de/blog/2012/01/19/episode-7-closures/" data-via="" data-counturl="http://rubyismagic.de/blog/2012/01/19/episode-7-closures/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+    </p>
+  </footer>
+</article>
+
+  <section>
+    <h1>Comments</h1>
+    <div id="disqus_thread" aria-live="polite"><noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+  </section>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Über uns</h1>
+  <p>Dieser Blog begleitet unsere Vortragsreihe über die magischen Momente von Ruby auf der Kölner Ruby User Group <a href="http://twitter.com/colognerb">@colognerb</a>. Hier könnt ihr die Slides zu den Vorträgen finden und im Nachgang auch immer einen mehr oder weniger ausführlichen Artikel zum Thema.</p>
+</section>
+<section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/01/19/episode-7-closures/">Episode #7: Closures</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Dirk Breuer & Sebastian Cohnen -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+<script type="text/javascript">
+      var disqus_shortname = 'rubyismagic';
+      
+        
+        // var disqus_developer = 1;
+        var disqus_identifier = 'http://rubyismagic.de/blog/2012/01/19/episode-7-closures/';
+        var disqus_url = 'http://rubyismagic.de/blog/2012/01/19/episode-7-closures/';
+        var disqus_script = 'embed.js';
+      
+    (function () {
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      dsq.src = 'http://' + disqus_shortname + '.disqus.com/' + disqus_script;
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    }());
+</script>
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

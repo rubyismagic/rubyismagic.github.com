@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[Ruby is Magic – Das Blog]]></title>
-  <link href="http://rubyismagic.de/atom.xml" rel="self"/>
+  <title><![CDATA[Category: closures | Ruby is Magic – Das Blog]]></title>
+  <link href="http://rubyismagic.de/blog/categories/closures/atom.xml" rel="self"/>
   <link href="http://rubyismagic.de/"/>
   <updated>2012-01-23T20:20:12+01:00</updated>
   <id>http://rubyismagic.de/</id>
@@ -18,7 +18,7 @@
     <link href="http://rubyismagic.de/blog/2012/01/19/episode-7-closures/"/>
     <updated>2012-01-19T22:55:00+01:00</updated>
     <id>http://rubyismagic.de/blog/2012/01/19/episode-7-closures</id>
-    <content type="html"><![CDATA[<p>Herzlich willkommen zu der <del>ersten</del> siebten Ausgabe von &#8216;Ruby is Magic&#8217;. Für alle
+    <content type="html"><![CDATA[<p>Herzlich willkommen zu der <del>ersten</del> siebten Ausgabe von 'Ruby is Magic'. Für alle
 die am 18.01. bei der <a href="http://colognerb.de">colognerb</a> nicht live mit
 dabei sein konnten, oder einfach noch mal lesen wollen was passiert ist,
 kommt hier nun die schriftliche Zusammenfassung mit Codestücken und
@@ -58,7 +58,7 @@ antworten kann auch ein Closure.</p>
 
 <h2>Die Sieben ist unsere Zahl</h2>
 
-<p><img class="right" src="http://rubyismagic.de/images/posts/episode_7_closures/sieben.png" width="400" height="289"></p>
+<p><img class="right" src="/images/posts/episode_7_closures/sieben.png" width="400" height="289"></p>
 
 <p>Wirklich bemerkenswert – und durchaus auch verwirrend – ist die Fülle an
 Konstrukten, die in Ruby Closures oder Closure-ähnliches beschreiben: Es
@@ -70,19 +70,18 @@ wieder einfacher ist als gedacht.</p>
 wenig Ruby-Code an. Den Anfang machen einfach <em>Blöcke</em>. Solche wie sie
 wohl jeder von uns täglich im Zusammenhang mit Iteratoren verwendet:</p>
 
-<figure class='code'><figcaption><span>Einfache Blöcke  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Einfache Blöcke  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@my_bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="vi">@my_bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="sx">%w(MacBook Headphones iPhone Camera)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
-</span><span class='line'>  <span class="vi">@my_bag</span><span class="o">.</span><span class="n">add</span> <span class="n">item</span>
-</span><span class='line'><span class="k">end</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'><span class="sr">&lt;p&gt;%w(MacBook Headphones iPhone Camera).each do |item|</span>
+</span><span class='line'><span class="sr">  @my_bag.add item</span>
+</span><span class='line'><span class="sr">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Der an <code>each</code> übergebene Codeblock wird für jedes Element in dem Array
 aufgerufen und hat dabei Zugriff auf den umgebenen Kontext. Dadurch
@@ -94,7 +93,7 @@ definierenden Kriterien schon mal erfüllt.</p>
 hineingesteckt hat. Eine mögliche Implementierung könnte dann wie folgt
 aussehen:</p>
 
-<figure class='code'><figcaption><span>&#8216;each_item&#8217;-Implementierung  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>'each_item'-Implementierung  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -104,17 +103,22 @@ aussehen:</p>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Bag</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">each_item</span>
-</span><span class='line'>    <span class="vi">@items</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
-</span><span class='line'>      <span class="k">yield</span> <span class="n">item</span>
-</span><span class='line'>    <span class="k">end</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">each_item</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="vi">@my_bag</span><span class="o">.</span><span class="n">each_item</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">item</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@items.each do |item|</span>
+</span><span class='line'><span class="sr">  yield item</span>
+</span><span class='line'><span class="sr">end</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="vi">@my_bag</span><span class="o">.</span><span class="n">each_item</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">item</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Bemerkenswert an dieser Stelle ist, dass wir in der Methodensignatur
 keine Parameter definiert haben. Blöcke können also einfach implizit an
@@ -130,7 +134,7 @@ prüfen.</p>
 Glück) nicht erweitern. So erhält man dann auch bei der Ausführung des
 nachfolgenden Codes einen Fehler.</p>
 
-<figure class='code'><figcaption><span>Blöcke erweitern den definierenden Kontext nicht  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Blöcke erweitern den definierenden Kontext nicht  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -140,17 +144,20 @@ nachfolgenden Codes einen Fehler.</p>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="sx">%w(MacBook Headphones iPhone Camera)</span><span class="o">.</span><span class="n">each</span> <span class="k">do</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span>
 </span><span class='line'>  <span class="n">item_count</span> <span class="o">||=</span> <span class="mi">0</span>
 </span><span class='line'>  <span class="vi">@my_bag</span><span class="o">.</span><span class="n">add</span> <span class="n">item</span>
 </span><span class='line'>  <span class="n">item_count</span> <span class="o">+=</span> <span class="mi">1</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="n">item_count</span><span class="si">}</span><span class="s2"> item(s) have been added to my bag.&quot;</span>
+</span><span class='line'><span class="sr">&lt;p&gt;puts &quot;</span><span class="si">#{</span><span class="n">item_count</span><span class="si">}</span><span class="sr"> item(s) have been added to my bag.&quot;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># =&gt; NameError: undefined local variable or method ‘item_count’</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;=&gt;</span> <span class="no">NameError</span><span class="p">:</span> <span class="n">undefined</span> <span class="n">local</span> <span class="n">variable</span> <span class="ow">or</span> <span class="nb">method</span> <span class="err">‘</span><span class="n">item_count</span><span class="err">’</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Insgesamt sind Blöcke also schon mal ein guter Schritt in die richtige Richtung.
 Allerdings fehlen noch zwei Eigenschaften:</p>
@@ -165,46 +172,7 @@ Methodenaufruf) <em>und</em></li>
 <p>Beiden Problemen lässt sich damit begegnen, in dem man den Block
 explizit macht, also in die Methodensignatur aufnimmt:</p>
 
-<figure class='code'><figcaption><span>Expliziter Block  </span></figcaption>
- <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Bag</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@items</span> <span class="o">=</span> <span class="n">items</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">each_item</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@items</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span> <span class="sx">%w(MacBook Headphones Keys)</span>
-</span><span class='line'><span class="n">bag</span><span class="o">.</span><span class="n">each_item</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">item</span> <span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>Als Nutzer der Methode ändert sich für mich dadurch übrigens überhaupt
-nichts. Ich erhalte nicht einmal einen <code>ArgumentError</code> wenn ich den
-Block nicht an die Methode übergebe – selbst nicht bei dem Aufruf von
-<code>@items.each(&amp;block)</code>, denn <code>each</code> liefert einfach eine
-<code>Enumerator</code>-Instanz zurück, wenn kein Block mitgegeben wird.</p>
-
-<p>Als letzten Schritt müssen wir nun nur noch dafür sorgen, dass der Block
-gespeichert werden kann und somit jederzeit aufrufbar wird. Wir
-erreichen das, indem wir uns einfach das <code>&amp;</code>-Prefix des Blockparameters
-sparen, was ein Synonym für <code>Proc.new(&amp;block)</code> ist.</p>
-
-<figure class='code'><figcaption><span>Speichern des Blocks  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Expliziter Block  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -222,31 +190,98 @@ sparen, was ein Synonym für <code>Proc.new(&amp;block)</code> ist.</p>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
+<span class='line-number'>18</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Bag</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@items</span> <span class="o">=</span> <span class="n">items</span>
-</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">define_iterator</span><span class="p">(</span><span class="o">&amp;</span><span class="n">block</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@iterator</span> <span class="o">=</span> <span class="n">block</span> <span class="c1"># Proc.new &amp;block</span>
-</span><span class='line'>  <span class="k">end</span>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@items = items</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">iterate!</span>
-</span><span class='line'>    <span class="vi">@items</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="o">&amp;</span><span class="vi">@iterator</span><span class="p">)</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sx">%w(MacBook Headphones Keys)</span><span class="p">)</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">each_item</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">block</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@items.each(&amp;amp;block)</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span> <span class="sx">%w(MacBook Headphones Keys)</span>
+</span><span class='line'><span class="n">bag</span><span class="o">.</span><span class="n">each_item</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">item</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Als Nutzer der Methode ändert sich für mich dadurch übrigens überhaupt
+nichts. Ich erhalte nicht einmal einen <code>ArgumentError</code> wenn ich den
+Block nicht an die Methode übergebe – selbst nicht bei dem Aufruf von
+<code>@items.each(&amp;block)</code>, denn <code>each</code> liefert einfach eine
+<code>Enumerator</code>-Instanz zurück, wenn kein Block mitgegeben wird.</p>
+
+<p>Als letzten Schritt müssen wir nun nur noch dafür sorgen, dass der Block
+gespeichert werden kann und somit jederzeit aufrufbar wird. Wir
+erreichen das, indem wir uns einfach das <code>&amp;</code>-Prefix des Blockparameters
+sparen, was ein Synonym für <code>Proc.new(&amp;block)</code> ist.</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Speichern des Blocks  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Bag</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="n">items</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@items = items</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">define_iterator</span><span class="p">(</span><span class="o">&amp;</span><span class="n">amp</span><span class="p">;</span><span class="n">block</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@iterator = block # Proc.new &amp;amp;block</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">iterate!</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@items.each(&amp;amp;@iterator)</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sx">%w(MacBook Headphones Keys)</span><span class="p">)</span>
 </span><span class='line'><span class="n">bag</span><span class="o">.</span><span class="n">define_iterator</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="nb">puts</span> <span class="n">item</span> <span class="p">}</span>
 </span><span class='line'><span class="n">bag</span><span class="o">.</span><span class="n">iterate!</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Damit haben wir also endlich unser Closure. Wir hoffen es hat euch mal
 wieder gefallen und bis zum nächsten Mal … Moment! … Das kann es doch
 noch nicht gewesen sein. Richtig – da kommt noch was!</p>
 
-<h2>&#8220;Echte&#8221; Closures?!</h2>
+<h2>"Echte" Closures?!</h2>
 
 <p>Wie Eingangs bereits erwähnt, hält Ruby für uns mehrere Möglichkeiten
 bereit ein Closure zu konstruieren:</p>
@@ -274,7 +309,7 @@ erwarten gewesen: Ja, es gibt Unterschiede. Schauen wir uns einmal den <em>Kontr
 möchte führt dies unter Umständen nicht immer zu dem gewünschten
 Resultat:</p>
 
-<figure class='code'><figcaption><span>Unterschiedliches Verhalten bei &#8216;return&#8217;  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Unterschiedliches Verhalten bei 'return'  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -290,42 +325,48 @@ Resultat:</p>
 <span class='line-number'>13</span>
 <span class='line-number'>14</span>
 <span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">def</span> <span class="nf">call_closure</span><span class="p">(</span><span class="n">closure</span><span class="p">)</span>
 </span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;Calling a closure&quot;</span>
 </span><span class='line'>  <span class="n">result</span> <span class="o">=</span> <span class="n">closure</span><span class="o">.</span><span class="n">call</span>
 </span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;The result of the call was: </span><span class="si">#{</span><span class="n">result</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">call_closure</span><span class="p">(</span><span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;All hell breaks loose!&quot;</span> <span class="p">})</span>
+</span><span class='line'><span class="sr">&lt;p&gt;call_closure(Proc.new { return &quot;All hell breaks loose!&quot; })&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># =&gt; Calling a closure</span>
-</span><span class='line'><span class="c1"># =&gt; LocalJumpError: unexpected return</span>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;=&gt;</span> <span class="no">Calling</span> <span class="n">a</span> <span class="n">closure</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">call_closure</span><span class="p">(</span><span class="nb">lambda</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;Everypony calm down. All is good.&quot;</span> <span class="p">})</span>
+</span><span class='line'><span class="sr">&lt;h1&gt;=&gt; LocalJumpError: unexpected return&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="c1"># =&gt; Calling a closure</span>
-</span><span class='line'><span class="c1"># =&gt; The result of the call was: ‘Everypony calm down. All is good.’</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">call_closure</span><span class="p">(</span><span class="nb">lambda</span> <span class="p">{</span> <span class="k">return</span> <span class="s2">&quot;Everypony calm down. All is good.&quot;</span> <span class="p">})</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;h1&gt;=&gt; Calling a closure&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;=&gt;</span> <span class="no">The</span> <span class="n">result</span> <span class="n">of</span> <span class="n">the</span> <span class="n">call</span> <span class="n">was</span><span class="p">:</span> <span class="err">‘</span><span class="no">Everypony</span> <span class="n">calm</span> <span class="n">down</span><span class="o">.</span> <span class="no">All</span> <span class="n">is</span> <span class="n">good</span><span class="o">.</span><span class="err">’</span><span class="o">&lt;</span><span class="sr">/h1&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Während sich also ein <code>return</code> in einem durch <code>Proc.new</code> erzeugten
-Closure immer auf den ursprünglich definierenden Kontext bezieht (in diesem Beispiel ist das <code>main</code>), springt es in einem <code>lambda</code>-Closure einfach aus dem <code>lambda</code> zurück. Bei der Verwendung der <code>lambda</code>-Methode erhält man also eine &#8220;true closure&#8221;, welches sich in puncto Kontrollfluss wie eine Methode verhält. In beiden Fällen erhält man übrigens eine Instanz der <code>Proc</code>-Klasse.</p>
+Closure immer auf den ursprünglich definierenden Kontext bezieht (in diesem Beispiel ist das <code>main</code>), springt es in einem <code>lambda</code>-Closure einfach aus dem <code>lambda</code> zurück. Bei der Verwendung der <code>lambda</code>-Methode erhält man also eine "true closure", welches sich in puncto Kontrollfluss wie eine Methode verhält. In beiden Fällen erhält man übrigens eine Instanz der <code>Proc</code>-Klasse.</p>
 
 <h3>Aritätsprüfung</h3>
 
 <p>Closures antworten nicht nur auf <code>call()</code>, sondern auch auf die Nachricht
 <code>arity()</code>:</p>
 
-<blockquote><p>Returns the number of arguments that would not be ignored. If the block<br/>is declared to take no arguments, returns 0. If the block is known to<br/>take exactly n arguments, returns n. If the block has optional<br/>arguments, return -n-1, where n is the number of mandatory arguments. A<br/>proc with no argument declarations is the same a block declaring || as<br/>its arguments.</p><footer><strong>Ruby-Dokumentation</strong> <cite><a href='http://www.ruby-doc.org/core-1.9.3/Proc.html#method-i-arity'>www.ruby-doc.org/core-1.9.3/&hellip;</a></cite></footer></blockquote>
-
+<p><blockquote><p>Returns the number of arguments that would not be ignored. If the block<br/>is declared to take no arguments, returns 0. If the block is known to<br/>take exactly n arguments, returns n. If the block has optional<br/>arguments, return -n-1, where n is the number of mandatory arguments. A<br/>proc with no argument declarations is the same a block declaring || as<br/>its arguments.</p><footer><strong>Ruby-Dokumentation</strong> <cite><a href='http://www.ruby-doc.org/core-1.9.3/Proc.html#method-i-arity'>www.ruby-doc.org/core-1.9.3/&hellip;</a></cite></footer></blockquote></p>
 
 <p>Es liegt nahe, dass die Arität beim Aufruf des Closures überprüft wird.
 Falls die Anzahl der Parameter dann nicht mit der erwarteten
 übereinstimmt wird ein <code>ArgumentError</code> geworfen. Dieses Verhalten tritt
 allerdings nur auf, wenn die <code>lambda</code>-Methode verwendet wurde.
-&#8220;Closures&#8221; durch <code>Proc.new</code> überprüfen die Arität nicht:</p>
+"Closures" durch <code>Proc.new</code> überprüfen die Arität nicht:</p>
 
-<figure class='code'><figcaption><span>Aritätsprüfung: Proc.new  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Aritätsprüfung: Proc.new  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -335,17 +376,14 @@ allerdings nur auf, wenn die <code>lambda</code>-Methode verwendet wurde.
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">proc_closure</span> <span class="o">=</span> <span class="no">Proc</span><span class="o">.</span><span class="n">new</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">|</span>
 </span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;arg1: </span><span class="si">#{</span><span class="n">arg1</span><span class="si">}</span><span class="s2">; arg2: </span><span class="si">#{</span><span class="n">arg2</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">proc_closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># arg1: 1; arg2: 2</span>
-</span><span class='line'><span class="n">proc_closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># arg1: 1; arg2: 2</span>
-</span><span class='line'><span class="n">proc_closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># arg1: 1; arg2: nil</span>
-</span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="sr">&lt;p&gt;proc_closure.call(1,2,3,4) # arg1: 1; arg2: 2</span>
+</span><span class='line'><span class="sr">proc_closure.call(1,2) # arg1: 1; arg2: 2</span>
+</span><span class='line'><span class="sr">proc_closure.call(1) # arg1: 1; arg2: nil</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
-
-
-
-<figure class='code'><figcaption><span>Aritätsprüfung: lambda  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Aritätsprüfung: lambda  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -355,13 +393,12 @@ allerdings nur auf, wenn die <code>lambda</code>-Methode verwendet wurde.
 <span class='line-number'>7</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="n">lambda_closure</span> <span class="o">=</span> <span class="nb">lambda</span> <span class="k">do</span> <span class="o">|</span><span class="n">arg1</span><span class="p">,</span> <span class="n">arg2</span><span class="o">|</span>
 </span><span class='line'>  <span class="nb">puts</span> <span class="s2">&quot;arg1: </span><span class="si">#{</span><span class="n">arg1</span><span class="si">}</span><span class="s2">; arg2: </span><span class="si">#{</span><span class="n">arg2</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">lambda_closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">)</span> <span class="c1"># ArgumentError</span>
-</span><span class='line'><span class="n">lambda_closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span> <span class="c1"># arg1: 1; arg2: 2</span>
-</span><span class='line'><span class="n">lambda_closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="c1"># ArgumentError</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'><span class="sr">&lt;p&gt;lambda_closure.call(1,2,3,4) # ArgumentError</span>
+</span><span class='line'><span class="sr">lambda_closure.call(1,2) # arg1: 1; arg2: 2</span>
+</span><span class='line'><span class="sr">lambda_closure.call(1) # ArgumentError</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Aber genauso magisch wie Ruby ist, gibt ist auch immer mal wieder
 <a href="https://www.destroyallsoftware.com/talks/wat">Momente der Verwirrung</a>.
@@ -385,7 +422,7 @@ Hinsicht: <code>lambda {}.arity == lambda {||}.arity == 0</code></p>
 
 <h2>One More Thing</h2>
 
-<p><img class="right" src="http://rubyismagic.de/images/ponies/pinkie_pie.png" width="280" height="311"></p>
+<p><img class="right" src="/images/ponies/pinkie_pie.png" width="280" height="311"></p>
 
 <p>Fassen wir einmal zusammen, welche Möglichkeiten von Closures wir bisher besprochen haben:</p>
 
@@ -405,7 +442,7 @@ Hinsicht: <code>lambda {}.arity == lambda {||}.arity == 0</code></p>
 
 <p>Um eine Methode referenzierbar zu machen, benötigt man die <code>method()</code>-Methode. Mit <code>method()</code> erhält man eine <code>Method</code>-Instanz, welches die Methode repräsentiert.</p>
 
-<figure class='code'><figcaption><span>Methoden als Closures  </span></figcaption>
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Methoden als Closures  </span></figcaption>
  <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
@@ -423,25 +460,36 @@ Hinsicht: <code>lambda {}.arity == lambda {||}.arity == 0</code></p>
 <span class='line-number'>15</span>
 <span class='line-number'>16</span>
 <span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
 </pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Bag</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nf">each_item</span><span class="p">(</span><span class="n">closure</span><span class="p">)</span>
-</span><span class='line'>    <span class="vi">@items</span><span class="o">.</span><span class="n">each</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="n">closure</span><span class="o">.</span><span class="n">call</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="p">}</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">each_item</span><span class="p">(</span><span class="n">closure</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="k">class</span> <span class="nc">Iterator</span>
-</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">print_element</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
-</span><span class='line'>    <span class="nb">puts</span> <span class="s2">&quot;Element: </span><span class="si">#{</span><span class="n">element</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span class='line'>  <span class="k">end</span>
-</span><span class='line'><span class="k">end</span>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;@items.each { |item| closure.call(item) }</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">my_bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sx">%w(MacBook Headphones iPad Gloves)</span><span class="p">)</span>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">my_bag</span><span class="o">.</span><span class="n">each_item</span> <span class="nb">lambda</span> <span class="p">{</span> <span class="o">|</span><span class="n">item</span><span class="o">|</span> <span class="nb">puts</span> <span class="s2">&quot;Element: </span><span class="si">#{</span><span class="n">item</span><span class="si">}</span><span class="s2">&quot;</span> <span class="p">}</span>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="k">class</span> <span class="nc">Iterator</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nc">self</span><span class="o">.</span><span class="nf">print_element</span><span class="p">(</span><span class="n">element</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
 </span><span class='line'>
-</span><span class='line'><span class="n">my_bag</span><span class="o">.</span><span class="n">each_item</span> <span class="no">Iterator</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:print_element</span><span class="p">)</span>
-</span></code></pre></td></tr></table></div></figure>
-
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;puts &quot;Element: </span><span class="si">#{</span><span class="n">element</span><span class="si">}</span><span class="sr">&quot;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">my_bag</span> <span class="o">=</span> <span class="no">Bag</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="sx">%w(MacBook Headphones iPad Gloves)</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;my_bag.each_item lambda { |item| puts &quot;Element: </span><span class="si">#{</span><span class="n">item</span><span class="si">}</span><span class="sr">&quot; }&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">my_bag</span><span class="o">.</span><span class="n">each_item</span> <span class="no">Iterator</span><span class="o">.</span><span class="n">method</span><span class="p">(</span><span class="ss">:print_element</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
 
 <p>Als Beispiel für Methoden als Closures haben wird eine Implementierung von
 <a href="http://stackoverflow.com/questions/101268/hidden-features-of-python#101447">Python-style Decorators</a> gezeigt.
