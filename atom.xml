@@ -4,7 +4,7 @@
   <title><![CDATA[Ruby is Magic – Das Blog]]></title>
   <link href="http://rubyismagic.de/atom.xml" rel="self"/>
   <link href="http://rubyismagic.de/"/>
-  <updated>2012-01-23T20:20:12+01:00</updated>
+  <updated>2012-01-26T10:44:16+01:00</updated>
   <id>http://rubyismagic.de/</id>
   <author>
     <name><![CDATA[Dirk Breuer & Sebastian Cohnen]]></name>
@@ -372,7 +372,7 @@ dieser Ausgabe:</p>
 <p>In Ruby 1.8 gilt für Closures durch <code>lambda</code>:</p>
 
 <ul>
-<li><code>lambda {||}.artiy != lambda {}.arity</code></li>
+<li><code>lambda {||}.arity != lambda {}.arity</code></li>
 <li><code>lambda {}.arity == -1</code></li>
 <li>Die Anzahl der Argumente wird nicht geprüft wenn die Arität 1 ist</li>
 </ul>
