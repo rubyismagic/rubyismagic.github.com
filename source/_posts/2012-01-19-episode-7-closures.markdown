@@ -266,7 +266,7 @@ dieser Ausgabe:
 
 In Ruby 1.8 gilt für Closures durch `lambda`:
 
- * `lambda {||}.artiy != lambda {}.arity`
+ * `lambda {||}.arity != lambda {}.arity`
  * `lambda {}.arity == -1`
  * Die Anzahl der Argumente wird nicht geprüft wenn die Arität 1 ist
 
