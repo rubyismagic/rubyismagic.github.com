@@ -8,14 +8,14 @@ categories: closures pattern
 
 Willkommen bei "Ruby is Magic – Behind the Scenes". Wenn ihr euch noch
 an die [letzte Episode](blog/2012/01/19/episode-7-closures/) erinnert, dann haben wir gezeigt, wie sich in Ruby
-Methoden als Closuren verwenden lassen. Dazu haben wir das
+Methoden als Closures verwenden lassen. Dazu haben wir das
 [Decorator-Pattern](http://en.wikipedia.org/wiki/Decorator_pattern) ähnlich [wie in Python](http://stackoverflow.com/questions/101268/hidden-features-of-python#101447) [implementiert](https://gist.github.com/294f56ed664efa99dcac).
 
 Das Transkript der letzten Show war allerdings schon recht lang und
 daher sind wir nicht näher auf die Implementierung eingegangen. Da sie
 jedoch sehr interessant ist, wollen wir in diesem Artikel noch einmal
 im Detail darauf eingehen. Als kleinen Bonus haben wir das ganze auch
-einmal einem Benchmark unterzogen – Natürlich völlig
+einmal einem Benchmark unterzogen – natürlich völlig
 nicht-repräsentativ ;-)
 
 <!-- more -->
