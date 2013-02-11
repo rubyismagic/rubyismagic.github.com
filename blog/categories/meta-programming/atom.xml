@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: meta-programming | Ruby is Magic – Das Blog]]></title>
+  <link href="http://rubyismagic.de/blog/categories/meta-programming/atom.xml" rel="self"/>
+  <link href="http://rubyismagic.de/"/>
+  <updated>2013-02-11T01:48:12+01:00</updated>
+  <id>http://rubyismagic.de/</id>
+  <author>
+    <name><![CDATA[Dirk Breuer & Sebastian Cohnen]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Episode 8: self]]></title>
+    <link href="http://rubyismagic.de/blog/2012/02/20/episode-8-self/"/>
+    <updated>2012-02-20T17:13:00+01:00</updated>
+    <id>http://rubyismagic.de/blog/2012/02/20/episode-8-self</id>
+    <content type="html"><![CDATA[<p>Schön, dass ihr wieder bei 'Ruby is Magic' dabei seid. Heute wollen wir
+uns ein wenig mit uns selbst, also <code>self</code> beschäftigen. Das ist wichtig und die
+Grundlage für sehr viel von dem was wir hier so behandeln.</p>
+
+<p>Am Anfang steht, wie so oft, zunächst eine kurze Begriffsklärung:</p>
+
+<ul>
+<li><code>self</code> ist ein Schlüsselwort (von denen es ja nicht so viele gibt)</li>
+<li><code>self</code> zeigt immer auf das “aktuelle” Objekt</li>
+<li><code>self</code> ist abhängig vom Kontext</li>
+<li><code>self</code> ist der Default-Empfänger von Nachrichten</li>
+</ul>
+
+
+<!-- more -->
+
+
+<p>Okay… Was lässt sich nun mit diesem <code>self</code> so alles machen? Eine Frage
+die sich stellt, ist ob sich das Objekt auf das <code>self</code> zeigt ändern
+lässt. Die Antwort ist typisch für Ruby: Ja, natürlich. Interessanter
+ist da eher die Frage nach dem <em>Wie?</em> Naheliegend wäre es mit Zuweisung
+zu versuchen:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>self zuweisen  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="nb">self</span> <span class="o">=</span> <span class="no">Object</span><span class="o">.</span><span class="n">new</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Dieser Code führt allerdings zu einem Fehler. Interessanterweise jedoch zu einem
+syntaktischen Fehler:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Syntax-Fehler wenn man self zuweist  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="no">SyntaxError</span><span class="p">:</span> <span class="no">Can</span><span class="err">&#39;</span><span class="n">t</span> <span class="n">change</span> <span class="n">the</span> <span class="n">value</span> <span class="n">of</span> <span class="nb">self</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Wie lässt sich <code>self</code> also nun ändern, wenn nicht durch direkte
+Zuweisung? Die Antwort ist schon unter den Eingangs gelisteten Punkten
+zu finden: <code>self</code> ist abhängig vom Kontext. Es wird also immer dann
+geändert, wenn der Kontext sich ändert. Der Kontext ändert sich
+beispielsweise, wenn man eine Klasse definiert:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Kontextwechsel durch Klassendefinition  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pony</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="nb">self</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  def work&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="nb">self</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;Pony&quot;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Pony</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">work</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;#&amp;lt;Pony:0x106da8368&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Oder während eines Methodenaufrufs:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Kontextwechsel durch Methodenaufruf  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pony</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">visit</span><span class="p">(</span><span class="n">other_pony</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;puts &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="sr"> is on a visit.&quot;</span>
+</span><span class='line'><span class="sr">other_pony.is_pleased</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">def</span> <span class="nf">is_pleased</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;puts &quot;</span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="sr"> is pleased about a visit.&quot;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Pony</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Applejack&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">visit</span> <span class="no">Pony</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">&quot;Pinkie Pie&quot;</span><span class="p">)</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;#&amp;lt;Pony:Applejack&gt; is on a visit.&quot;</span>
+</span><span class='line'><span class="sr">=&gt; &quot;#&amp;lt;Pony:Pinkie Pie&gt; is pleased about a visit.&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Beide Varianten werden alle regelmäßig verwenden und sich auch eher
+nicht so aufregend. Spannend wird es, wenn wir uns mit <code>class_eval</code> oder
+<code>instance_eval</code> beschäftigten</p>
+
+<p>Beides Varianten, die man regelmäßig sieht und die (auf den ersten
+Blick) wenig spannend daher kommen. Viel interessanter sind die
+Varianten mit <code>class_eval</code>, <code>module_eval</code> und <code>instance_eval</code>:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Beispiel für class_eval  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pony</span><span class="p">;</span> <span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;Pony.class_eval do</span>
+</span><span class='line'><span class="sr">  puts self</span>
+</span><span class='line'><span class="sr">  def work&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="n">pre</span><span class="o">&gt;&lt;</span><span class="n">code</span><span class="o">&gt;</span><span class="nb">puts</span> <span class="s2">&quot;</span><span class="si">#{</span><span class="nb">self</span><span class="si">}</span><span class="s2"> is working!&quot;</span>
+</span><span class='line'><span class="o">&lt;</span><span class="sr">/code&gt;&lt;/</span><span class="n">pre</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="k">end</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;Pony&quot;&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Pony</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">work</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;#&amp;lt;Pony:0x10bc98a68&gt; is working!&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Ok, sieht so aus wie die Klassendefinition von vorhin nur etwas
+umständlicher. Das Beispiel für <code>instance_eval</code> hält dann schon mehr
+bereit:</p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'><figcaption><span>Beispiel für instance_eval  </span></figcaption>
+ <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pony</span>
+</span><span class='line'>  <span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">age</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;&quot;Don&#39;t let anyone know!&quot;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">twilight_sparkle</span> <span class="o">=</span> <span class="no">Pony</span><span class="o">.</span><span class="n">new</span>
+</span><span class='line'><span class="nb">puts</span> <span class="n">twilight_sparkle</span>
+</span><span class='line'><span class="nb">puts</span> <span class="nb">self</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;#&amp;lt;Pony:0x10ba7b690&gt;&quot;</span>
+</span><span class='line'><span class="sr">=&gt; main&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="n">twilight_sparkle</span><span class="o">.</span><span class="n">instance_eval</span> <span class="k">do</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="nb">self</span>
+</span><span class='line'>  <span class="nb">puts</span> <span class="n">age</span>
+</span><span class='line'><span class="k">end</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; &quot;#&amp;lt;Pony:0x10ba7b690&gt;&quot;</span>
+</span><span class='line'><span class="sr">=&gt; &quot;Don&#39;t let anyone know!&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<p>Was passiert hier? Die Dokumentation zu <code>instance_eval</code> beschreibt die
+Funktionalität wie folgt:</p>
+
+<p><blockquote><p>Evaluates a string containing Ruby source code, or the given block,<br/>within the context of the receiver (obj). […]</p><footer><strong>Ruby-Dokumentation</strong> <cite><a href='http://www.ruby-doc.org/core-1.9.3/BasicObject.html#method-i-instance_eval'>www.ruby-doc.org/core-1.9.3/&hellip;</a></cite></footer></blockquote></p>
+
+<p>Der Code-Block wird im Kontext des Empfängers ausgeführt. Es muss also
+eine Kontextänderung stattfinden, und damit muss sich <code>self</code> ändern. Man
+erhält dabei natürlich auch Zugriff auf die Instanzvariablen des
+Empfängers. Neben Instanzvariablen erhalten wir hier aber auch Zugriff
+auf die private Methode <code>age</code>. Warum dem so ist, erklärt unser erstes
+Fun-Fact für heute.</p>
+
+<h2>Fun Fact #1</h2>
+
+<p>Private-Methoden lassen sich nur aufrufen wenn der Empfänger implizit
+ist. Also unabhängig davon, ob die entsprechende Methode innerhalb der
+Instanz aufgerufen wird oder nicht, wie folgendes Beispiel verdeutlichen
+soll:</p>
+
+<p><img class="right" src="/images/ponies/pinkie_pie.png" width="280" height="311"></p>
+
+<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='ruby'><span class='line'><span class="k">class</span> <span class="nc">Pony</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">want_to_know_age!</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;self.age</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span>  <span class="kp">private</span>
+</span><span class='line'>  <span class="k">def</span> <span class="nf">age</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;pre&gt;&lt;code&gt;&quot;Don&#39;t let anyone know!&quot;</span>
+</span><span class='line'><span class="sr">&lt;/</span><span class="n">code</span><span class="o">&gt;&lt;</span><span class="sr">/pre&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;  end</span>
+</span><span class='line'><span class="sr">end&lt;/</span><span class="nb">p</span><span class="o">&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="o">&lt;</span><span class="nb">p</span><span class="o">&gt;</span><span class="no">Pony</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">want_to_know_age!</span><span class="o">&lt;</span><span class="sr">/p&gt;</span>
+</span><span class='line'>
+</span><span class='line'><span class="sr">&lt;p&gt;=&gt; NoMethodError: &quot;private method ‘age’</span>
+</span><span class='line'><span class="sr">   called for #&amp;lt;Pony:0x00…d8&gt;&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+
+<h2>It's all about methods</h2>
+
+<p><img class="right" src="/images/posts/episode_8_self/superclass_hierarchy.png" width="371" height="285">
+<img class="right" src="/images/posts/episode_8_self/extended_superclass_hierarchy.png" width="713" height="356">
+<img class="right" src="/images/posts/episode_8_self/singleton_class.png" width="707" height="310">
+<img class="right" src="/images/posts/episode_8_self/method_lookup.png" width="665" height="354"></p>
+
+<h2>Präsentation</h2>
+
+<p>Am Ende findet hier natürlich auch wieder die Vortragsfolien. Aber an
+dieser Stelle möchten wir auch noch mal auf das Buch <a href="http://pragprog.com/book/ppmetr/metaprogramming-ruby">Metaprogramming Ruby</a> von <a href="http://ducktypo.blogspot.com/">Paolo Perrotta</a> hinweisen, dass uns sehr bei der
+Recherche zu dieser Episode unterstützt hat. Es ist hervorragend geschriebenen
+und wir können es nur jedem ans Herz legen, der sich intensiver mit der dieser
+Thematik auseinander setzen möchte.</p>
+
+<div style="width:595px" id="__ss_11676595"><object id="__sse11676595" width="595" height="497"> <param name="movie" value="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=rubyismagic-episode-8-self-120220103700-phpapp01&rel=0&stripped_title=ruby-is-magic-episode-8-self&userName=railsbros_dirk" /> <param name="allowFullScreen" value="true"/> <param name="allowScriptAccess" value="always"/> <param name="wmode" value="transparent"/> <embed name="__sse11676595" src="http://static.slidesharecdn.com/swf/ssplayer2.swf?doc=rubyismagic-episode-8-self-120220103700-phpapp01&rel=0&stripped_title=ruby-is-magic-episode-8-self&userName=railsbros_dirk" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="transparent" width="595" height="497"></embed> </object> </div>
+
+]]></content>
+  </entry>
+  
+</feed>
